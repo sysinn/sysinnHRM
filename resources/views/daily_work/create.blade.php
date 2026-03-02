@@ -35,7 +35,11 @@
                        <!-- Department (Readonly) -->
                         <div>
                             <label class="block text-gray-700 font-semibold mb-1">Department</label>
+<<<<<<< HEAD
                             @if(auth()->user()->roles->contains('id', 9) || auth()->user()->roles->contains('id', 6))
+=======
+                             @if(auth()->user()->roles->contains('id', 9))
+>>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
                             <input type="text" value="{{ auth()->user()->employee->department->name ?? '' }}" 
                                 class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100" readonly>
                             <input type="hidden" name="department_id" value="{{ auth()->user()->employee->department->id ?? '' }}">

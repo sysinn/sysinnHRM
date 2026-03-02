@@ -185,8 +185,11 @@ Route::resource('leaves', \App\Http\Controllers\LeaveController::class);
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('daily-work', DailyWorkDoneController::class);
+<<<<<<< HEAD
     Route::get('daily-work/data', [DailyWorkDoneController::class, 'data'])->name('daily-work.data');
     Route::get('/admin/daily-work-status', [DailyWorkDoneController::class, 'adminStatus'])->name('daily-work.adminStatus');
+=======
+>>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 });
 
 Route::get('/check-role', function () {
@@ -227,4 +230,8 @@ Route::post('/daily-work/{id}/status',
 
 // Employee Daily Tasks
 Route::post('/employee-daily-tasks/{task}/status', [EmployeeDailyTaskController::class, 'updateStatus'])
+<<<<<<< HEAD
     ->name('employee-daily-tasks.updateStatus');
+=======
+    ->name('employee-daily-tasks.updateStatus');
+>>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
