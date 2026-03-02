@@ -11,7 +11,6 @@ class RoleModuleController extends Controller
     {
         $modules = Module::orderBy('label')->get();
         $assigned = $role->modules->pluck('id')->toArray();
-
         return view('roles.edit_modules', compact('role', 'modules', 'assigned'));
     }
 
@@ -19,7 +18,6 @@ class RoleModuleController extends Controller
     {
         $moduleIds = $request->input('modules', []);
         $role->modules()->sync($moduleIds);
-
         return redirect()->route('role-modules.edit', $role->id)->with('success', 'Modules updated successfully.');
     }
 }

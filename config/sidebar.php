@@ -81,4 +81,10 @@ return [
         'roles' => [1,2,9], // Only Super Admin
         'icon' => 'cog', // Optional: use any Heroicon name like 'cog', 'wrench', 'adjustments-horizontal'
     ],
+    [
+        'label' => 'Daily Work Status',
+        'route' => 'daily-work.adminStatus',
+        'roles' => [1, 2, 3, 4, 5, 6],
+        'icon' => 'clipboard-list',
+    ],
 ];

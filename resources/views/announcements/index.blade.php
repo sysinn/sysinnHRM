@@ -1,63 +1,74 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-    a.bg-blue-600.hover\:bg-blue-700.text-white.font-medium.py-2.px-4.rounded {
-        background-color: blue;
-    }
-    button.bg-blue-600.hover\:bg-blue-700.text-white.font-medium.py-2.px-4.rounded {
-        background-color: blue !important;
-    }
-</style>
 
-<div class="flex min-h-screen">
+<div class="flex min-h-screen bg-gray-50">
     <!-- Sidebar -->
     @include('layouts.sidebar')
 
     <!-- Main content -->
-    <main class="flex-1 p-6 bg-white">
-        <div class="max-w-7xl ">
+    <main class="flex-1 p-8">
+        <div class="max-w-7xl mx-auto">
 
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-[20px] font-semibold text-[#1E1E1E] font-[DM-sans]">Announcements</h1>
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-2xl font-semibold text-gray-800">Announcements</h1>
+
                 <a href="{{ route('announcements.create') }}"
-                   class="bg-[#0057D8] text-white font-medium py-2 px-4 rounded-[6px] flex items-center gap-2">
-                    <ion-icon name="add-circle-outline"></ion-icon>
-                 <span class='text-[14px] font-[400] font-[DM-sans] text-white'>Add New</span>
+                   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 transition text-white py-2.5 px-5 rounded-lg shadow-md">
+                    <ion-icon name="add-circle-outline" class="text-xl"></ion-icon>
+                    <span class="text-sm font-medium">Add New</span>
                 </a>
             </div>
 
+            <!-- Success Message -->
             @if (session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
+                <div class="mb-6 p-4 bg-green-100 text-green-700 border border-green-300 rounded-lg shadow-sm">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <div class="overflow-x-auto bg-white">
+            <!-- Table Container -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
                 <table class="min-w-full">
-                    <thead>
+                    <thead class="bg-gray-100 border-b border-gray-200">
                         <tr>
-                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">#</th>
-                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">Title</th>
-                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">Publish Date</th>
-                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">Body</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">#</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Featured Image</th>
+
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Publish Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Body</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @forelse ($announcements as $announcement)
-                            <tr>
-                                <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ $announcement->id }}</td>
-                                <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ $announcement->title }}</td>
-                                <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ $announcement->publish_date }}</td>
-                                <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ Str::limit($announcement->body, 100) }}</td>
+                    <tbody class="divide-y divide-gray-200">
+
+                            @forelse ($announcements as $announcement)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 text-sm text-gray-800">{{ $announcement->id }}</td>
+                                <td class="px-6 py-4 text-sm font-medium text-gray-800">{{ $announcement->title }}</td>
+                                <td class="px-6 py-4">
+                                @if($announcement->featured_image)
+                                    <img
+                                        src="{{ asset('storage/' . $announcement->featured_image) }}"
+                                        alt="Featured Image"
+                                        class="w-20 h-14 object-cover rounded-lg border border-gray-200 shadow-sm"
+                                    >
+                                @else
+                                    <span class="text-xs text-gray-400 italic">No image</span>
+                                @endif
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-700">{{ $announcement->publish_date }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-700">{{ Str::limit($announcement->body, 100) }}</td>
                             </tr>
-                        @empty
+                            @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                <td colspan="4" class="px-6 py-8 text-center text-gray-500 text-sm">
                                     No announcements found.
                                 </td>
                             </tr>
                         @endforelse
+                        
                     </tbody>
                 </table>
             </div>
@@ -65,4 +76,5 @@
         </div>
     </main>
 </div>
+
 @endsection

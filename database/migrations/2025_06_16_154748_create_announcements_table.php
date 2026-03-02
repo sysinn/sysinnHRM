@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('announcements', function (Blueprint $table) {
            $table->id();
         $table->string('title');
+        $table->string('featured_image')->nullable();
         $table->text('body');
         $table->date('publish_date')->nullable();
         $table->boolean('is_active')->default(true);

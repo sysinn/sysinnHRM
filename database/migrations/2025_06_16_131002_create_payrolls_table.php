@@ -12,13 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payrolls', function (Blueprint $table) {
-             $table->id();
+        $table->id();
         $table->foreignId('employee_id')->constrained()->onDelete('cascade');
         $table->decimal('basic_salary', 10, 2);
         $table->decimal('allowances', 10, 2)->default(0);
         $table->decimal('deductions', 10, 2)->default(0);
+        $table->decimal('overtime_pay', 10, 2)->default(0);
+        $table->decimal('bonus', 10, 2)->default(0);
+        $table->decimal('tax', 10, 2)->default(0);
         $table->decimal('net_salary', 10, 2);
         $table->date('pay_date');
+        $table->string('payment_method')->nullable(); // e.g., Bank Transfer, Cash
+        $table->string('bank_account_number')->nullable();
+        $table->string('payment_status')->default('Pending'); // Pending, Paid, Failed
+        $table->text('remarks')->nullable(); // notes or extra info
         $table->timestamps();
         });
     }

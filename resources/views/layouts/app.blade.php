@@ -5,8 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>@yield('title', config('app.name', 'Laravel'))</title>
+        <!-- <title>@yield('title', config('app.name', 'Laravel'))</title>
+        <title>@yield('title') - {{ config('app.name', 'Laravel') }}</title> -->
+        <title>
+            @php
+                // Get the last segment of the URL (slug)
+                $slug = request()->segment(count(request()->segments()));
 
+                // Make it singular and capitalize
+                $title = ucfirst(Str::singular(str_replace('-', ' ', $slug)));
+
+                // If no slug (e.g., home page), use site name
+                echo $slug ? $title : config('app.name', 'Laravel');
+            @endphp
+        </title>
+
+            <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -37,6 +51,10 @@
             }
         }
         </style>
+
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -78,5 +96,12 @@
                 })
             }); 
         </script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+@yield('scripts') 
     </body>
 </html>

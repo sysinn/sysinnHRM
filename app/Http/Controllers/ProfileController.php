@@ -11,6 +11,15 @@ class ProfileController extends Controller
     /**
      * Show the edit profile form.
      */
+
+
+    public function show()
+        {
+            $user = Auth::user();
+            return view('profile.show', compact('user'));
+        }
+
+
     public function edit()
     {
         $user = Auth::user();

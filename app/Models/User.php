@@ -1,33 +1,34 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Notifications\Notifiable;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'profile_picture',
+        'status',
         // 'role_id',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -35,38 +36,63 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-        protected function casts(): array
-        {
-            return [
-                'email_verified_at' => 'datetime',
-                'password' => 'hashed',
-            ];
-        }
-        public function roles()
-        {
-            return $this->belongsToMany(Role::class, 'role_user');
-            // return $this->belongsTo(Role::class);
-        }
-       public function comments()
-        {
-            return $this->morphMany(EmployeeTaskComment::class, 'commented_by');
-        }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 
-        public function employee()
-        {
-            return $this->hasOne(Employee::class);
-        }
-        public function attendances()
-        {
-            return $this->hasMany(\App\Models\Attendance::class);
-        }
+    /**
+     * Roles relationship (many-to-many)
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user');
+    }
 
+    /**
+     * Comments relationship (polymorphic)
+     */
+    public function comments()
+    {
+        return $this->morphMany(EmployeeTaskComment::class, 'commented_by');
+    }
 
-            /**
+    /**
+     * Link to employee record
+     */
+    public function employee()
+    {
+        return $this->hasOne(Employee::class);
+    }
+
+    /**
+     * Attendances
+     */
+    public function attendances()
+    {
+        return $this->hasMany(\App\Models\Attendance::class);
+    }
+
+    /**
+     * Check if user is active
+     */
+    public function isActive()
+    {
+        return $this->status == 1;
+    }
+
+    /**
+     * Check if user is inactive
+     */
+    public function isInactive()
+    {
+        return $this->status == 0;
+    }
+
+    /**
      * Check if the user has a specific role by name.
      */
     public function hasRole($role)
@@ -90,8 +116,4 @@ class User extends Authenticatable
         $role = Role::where('name', $roleName)->firstOrFail();
         $this->roles()->attach($role);
     }
-
-
-
 }
-

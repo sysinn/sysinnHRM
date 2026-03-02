@@ -11,8 +11,17 @@ class Payroll extends Model
         'basic_salary',
         'allowances',
         'deductions',
+        'overtime_pay',
+        'bonus',
+        'increment',
+        'increment_reason',
+        'tax',
         'net_salary',
-        'pay_date'
+        'pay_date',
+        'payment_method',
+        'bank_account_number',
+        'payment_status',
+        'remarks'
     ];
 
     public function employee()

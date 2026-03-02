@@ -6,6 +6,7 @@ use App\Models\EmployeeDailyTask;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeTaskDocument;
+use App\Notifications\NewTaskAssigned;
 
 class EmployeeDailyTaskController extends Controller
 {
@@ -62,6 +63,12 @@ class EmployeeDailyTaskController extends Controller
                 'file_path' => $path,
             ]);
         }
+
+        $task = EmployeeDailyTask::create($validated);
+        // Send notification to employee
+        if ($employee->user) {
+            $employee->user->notify(new NewTaskAssigned($task));
+        }
     }
 
     return redirect()->route('employee-daily-tasks.index')->with('success', 'Task created successfully.');
@@ -99,5 +106,21 @@ class EmployeeDailyTaskController extends Controller
 }
 
     
-    
+public function updateStatus(Request $request, EmployeeDailyTask $task)
+{
+    $validated = $request->validate([
+        'status' => 'required|in:pending,in_progress,completed',
+    ]);
+
+    $task->status = $validated['status'];
+    $task->save();
+
+    return response()->json(['message' => 'Status updated successfully']);
 }
+
+
+
+
+}
+
+

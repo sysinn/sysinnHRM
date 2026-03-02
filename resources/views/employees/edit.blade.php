@@ -1,102 +1,129 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex min-h-screen bg-white">
-  @include('layouts.sidebar')
+<div class="flex min-h-screen bg-gray-100">
+    @include('layouts.sidebar')
 
-  <main class="flex-1 p-8">
-    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-md">
-      <h2 class="text-[20px] font-semibold text-[#1E1E1E] font-[DM-sans] mb-[2rem]">Edit Employee</h2>
+    <main class="flex-1 p-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white shadow-md rounded-2xl p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    Edit Employee
+                </h2>
 
-      <form action="{{ route('employees.update', $employee->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-        @csrf
-        @method('PUT')
+                {{-- Errors --}}
+                @if ($errors->any())
+                    <div class="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
+                        <ul class="list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-        <div class="flex space-x-4">
-          <div class="w-1/2">
-            <label for="first_name" class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]">First Name</label>
-            <input type="text" id="first_name" name="first_name" value="{{ old('first_name', $employee->first_name) }}"
-                   class="mt-1 block w-full rounded-[2px] border border-[#B4B4B4]">
-            @error('first_name') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-          </div>
+                <form action="{{ route('employees.update', $employee->id) }}"
+                      method="POST"
+                      enctype="multipart/form-data"
+                      class="space-y-6">
+                    @csrf
+                    @method('PUT')
 
-          <div class="w-1/2">
-            <label for="last_name" class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]">Last Name</label>
-            <input type="text" id="last_name" name="last_name" value="{{ old('last_name', $employee->last_name) }}"
-                   class="mt-1 block w-full rounded-[2px] border border-[#B4B4B4]">
-            @error('last_name') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-          </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- First Name -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-1">First Name</label>
+                            <input type="text" name="first_name"
+                                   value="{{ old('first_name', $employee->first_name) }}"
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <!-- Last Name -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-1">Last Name</label>
+                            <input type="text" name="last_name"
+                                   value="{{ old('last_name', $employee->last_name) }}"
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-1">Email</label>
+                            <input type="email" name="email"
+                                   value="{{ old('email', $employee->email) }}"
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <!-- Phone -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-1">Phone</label>
+                            <input type="text" name="phone"
+                                   value="{{ old('phone', $employee->phone) }}"
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <!-- Position -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-1">Position</label>
+                            <input type="text" name="position"
+                                   value="{{ old('position', $employee->position) }}"
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <!-- Department -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-1">Department</label>
+                            <select name="department_id"
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                                <option value="">-- Select Department --</option>
+                                @foreach($departments as $dept)
+                                    <option value="{{ $dept->id }}"
+                                        @selected(old('department_id', $employee->department_id) == $dept->id)>
+                                        {{ $dept->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Salary -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-1">Salary</label>
+                            <input type="number" step="0.01" name="salary"
+                                   value="{{ old('salary', $employee->salary) }}"
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <!-- Hire Date -->
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-1">Hire Date</label>
+                            <input type="date" name="hired_at"
+                                   value="{{ old('hired_at', $employee->hired_at ? \Carbon\Carbon::parse($employee->hired_at)->format('Y-m-d') : '') }}"
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- Profile Picture -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Profile Picture</label>
+                        <input type="file" name="profile_picture" accept="image/*"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex justify-end gap-4 pt-4">
+                        <a href="{{ route('employees.index') }}"
+                           class="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">
+                            Cancel
+                        </a>
+
+                        <button type="submit"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow-sm transition">
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div>
-          <label for="email" class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]">Email</label>
-          <input type="email" id="email" name="email" value="{{ old('email', $employee->email) }}"
-                 class="mt-1 block w-full rounded-[2px] border border-[#B4B4B4]">
-          @error('email') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-        </div>
-
-        <div>
-          <label for="phone" class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]">Phone</label>
-          <input type="text" id="phone" name="phone" value="{{ old('phone', $employee->phone) }}"
-                 class="mt-1 block w-full rounded-[2px] border border-[#B4B4B4]">
-          @error('phone') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-        </div>
-
-        <div>
-          <label for="position" class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]">Position</label>
-          <input type="text" id="position" name="position" value="{{ old('position', $employee->position) }}"
-                 class="mt-1 block w-full rounded-[2px] border border-[#B4B4B4]">
-          @error('position') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-        </div>
-
-        <div>
-          <label for="department_id" class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]">Department</label>
-          <select id="department_id" name="department_id"
-                  class="mt-1 block w-full rounded-[2px] border border-[#B4B4B4]">
-            <option value="">Select department</option>
-            @foreach($departments as $dept)
-              <option value="{{ $dept->id }}" {{ old('department_id', $employee->department_id) == $dept->id ? 'selected' : '' }}>
-                {{ $dept->name }}
-              </option>
-            @endforeach
-          </select>
-          @error('department_id') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-        </div>
-
-        <div>
-          <label for="salary" class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]">Salary</label>
-          <input type="number" step="0.01" id="salary" name="salary" value="{{ old('salary', $employee->salary) }}"
-                 class="mt-1 block w-full rounded-[2px] border border-[#B4B4B4]">
-          @error('salary') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-        </div>
-
-        <div>
-          <label for="hired_at" class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]">Hire Date</label>
-          <input type="date" id="hired_at" name="hired_at"
-                 value="{{ old('hired_at', $employee->hired_at ? \Carbon\Carbon::parse($employee->hired_at)->format('Y-m-d') : '') }}"
-                 class="mt-1 block w-full rounded-[2px] border border-[#B4B4B4]">
-          @error('hired_at') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-        </div>
-
-        <div>
-          <label for="profile_picture" class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]s">Profile Picture</label>
-          <input type="file" id="profile_picture" name="profile_picture" accept="image/*"
-                 class="mt-1 block w-full">
-          @error('profile_picture') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-        </div>
-
-        <div class="flex justify-between pt-4">
-          <button type="submit"
-                  class="bg-[#0057D8] text-[16px] font-[500] text-white font-[DM-sans] py-3 px-4 rounded-[6px]">
-            Update Employee
-          </button>
-          <a href="{{ route('employees.index') }}"
-             class="text-gray-600 hover:text-blue-600 font-medium hover:underline">
-            Cancel
-          </a>
-        </div>
-      </form>
-    </div>
-  </main>
+    </main>
 </div>
 @endsection

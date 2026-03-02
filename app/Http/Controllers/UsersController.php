@@ -20,30 +20,41 @@ class UsersController extends Controller
     }
 
     // Handle login
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+   public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            $user = auth()->user();
+    // Attempt login
+    if (Auth::attempt($credentials)) {
 
-            // Redirect based on role
-            if ($user->roles->contains('id', 9)) {
-                return redirect()->route('employee.dashboard');
-            }
+        $user = auth()->user();
 
-            return redirect()->route('auth.dashboard');
+      
+        if ($user->status == 0) {
+            Auth::logout();
+
+            return back()->withErrors([
+                'email' => 'Your account is inactive. Please contact admin.',
+            ]);
         }
 
-        return back()->withErrors([
-            'email' => 'Invalid credentials.',
-        ])->onlyInput('email');
+        $request->session()->regenerate();
+
+        // Role-based redirect
+        if ($user->roles->contains('id', 9)) {
+            return redirect()->route('employee.dashboard');
+        }
+
+        return redirect()->route('auth.dashboard');
     }
 
+    return back()->withErrors([
+        'email' => 'Invalid credentials.',
+    ])->onlyInput('email');
+}
     // Show register form
     public function showRegisterForm()
     {
@@ -65,6 +76,7 @@ class UsersController extends Controller
             'role_id' => 'required|array',
             'role_id.*' => 'exists:roles,id',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'status' => 1, 
         ]);
 
         // Handle file upload
@@ -78,7 +90,9 @@ class UsersController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            // 'password' => Hash::make($data['password']),
             'profile_picture' => $profilePath,
+            'status' => 1,
         ]);
 
         // Assign roles
@@ -105,4 +119,65 @@ class UsersController extends Controller
         $users = User::with('roles')->get(); // eager load roles
         return view('auth.userslist', compact('users'));
     }
+
+
+
+    public function createQuick()
+{
+    $roles = Role::all();
+    return view('auth.users_quick_create', compact('roles'));
+}
+
+public function storeQuick(Request $request)
+{
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+         'role_id' => 'required|array',
+        'role_id.*' => 'exists:roles,id',
+    ]);
+
+    $profilePath = null;
+    if ($request->hasFile('profile_picture')) {
+        $profilePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+    }
+
+     $user = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make('defaultpassword'),
+        'profile_picture' => $profilePath,
+        'status' => 1,
+    ]);
+
+    // ✅ Assign roles
+    $user->roles()->sync($data['role_id']);
+
+    return redirect()
+        ->route('users.index')
+        ->with('success', 'User added successfully.');
+}
+
+
+public function toggleStatus(User $user)
+{
+    abort_unless(
+    auth()->user()->roles->whereIn('id', [1, 2, 3])->isNotEmpty(),
+    403
+);
+
+
+    $user->update([
+        'status' => !$user->status
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'status' => $user->status ? 'Active' : 'Inactive'
+    ]);
+}
+
+
+
 }

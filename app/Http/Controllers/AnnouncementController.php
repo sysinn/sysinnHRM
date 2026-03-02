@@ -26,20 +26,31 @@ class AnnouncementController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-         $request->validate([
+   public function store(Request $request)
+{
+    $request->validate([
         'title' => 'required|string|max:255',
         'body' => 'required',
         'publish_date' => 'nullable|date',
+        'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         'is_active' => 'boolean',
     ]);
 
-    Announcement::create($request->all());
+    $data = $request->all();
 
-    return redirect()->route('announcements.index')->with('success', 'Announcement created.');
-
+    // ✅ FIX FEATURED IMAGE
+    if ($request->hasFile('featured_image')) {
+        $data['featured_image'] = $request->file('featured_image')
+            ->store('announcements', 'public');
     }
+
+    Announcement::create($data);
+
+    return redirect()
+        ->route('announcements.index')
+        ->with('success', 'Announcement created.');
+}
+
 
     /**
      * Display the specified resource.

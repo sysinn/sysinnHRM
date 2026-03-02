@@ -50,17 +50,27 @@
         </div>
 
         <div>
-        <label for="position_id" class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]">Position</label>
-        <select name="position_id" id="position_id"
-                class="mt-1 block w-full rounded-[2px] border border-[#B4B4B4]">
-          <option value="">Select position</option>
-          @foreach($positions as $pos)
-            <option value="{{ $pos->id }}" {{ old('position_id') == $pos->id ? 'selected' : '' }}>
-              {{ $pos->name }}
-            </option>
-          @endforeach
-        </select>
-        @error('position_id') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+        <label for="position"
+       class="block text-[14px] font-[500] text-[#5F6377] font-[DM-sans] leading-[20px]">
+  Position
+</label>
+
+<select name="position" id="position"
+        class="mt-1 block w-full rounded-[2px] border border-[#B4B4B4]">
+  <option value="">Select position</option>
+
+  @foreach($positions as $pos)
+    <option value="{{ $pos->name }}"
+      {{ old('position') == $pos->name ? 'selected' : '' }}>
+      {{ $pos->name }}
+    </option>
+  @endforeach
+</select>
+
+@error('position')
+  <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+@enderror
+
       </div>
 
         <div>

@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmployeeDocument extends Model
 {
-   public function employee()
+    protected $fillable = [
+        'employee_id',
+        'title',
+        'file_path',
+        'document_type',
+    ];
+
+    public function employee()
 {
     return $this->belongsTo(Employee::class);
 }

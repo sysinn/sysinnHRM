@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\DailyWorkDone;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -45,6 +46,14 @@ class Employee extends Authenticatable
     {
         return $this->hasMany(EmployeeDocument::class);
     }
+    public function performances()
+    {
+        return $this->hasMany(Performance::class);
+    }
 
+    public function dailyWorks()
+    {
+        return $this->hasMany(DailyWorkDone::class);
+    }
 
 }
