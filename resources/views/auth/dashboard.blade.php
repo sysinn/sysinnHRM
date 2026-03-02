@@ -13,16 +13,16 @@
     @include('layouts.sidebar')
 
     <!-- Main content -->
-    <main class="flex-1 p-6">
+    <main class="flex-1 p-6 bg-white">
       
 
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-6">
+        <!-- <div class="mb-6">
             <h1 class="text-2xl font-semibold text-gray-800 dark:text-white">
                 Welcome, {{ Auth::user()->name }}!
             </h1>
-        </div>
+        </div> -->
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">

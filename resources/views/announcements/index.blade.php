@@ -15,14 +15,15 @@
     @include('layouts.sidebar')
 
     <!-- Main content -->
-    <main class="flex-1 p-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="flex-1 p-6 bg-white">
+        <div class="max-w-7xl ">
 
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-semibold text-gray-800 dark:text-white">Announcements</h1>
+                <h1 class="text-[20px] font-semibold text-[#1E1E1E] font-[DM-sans]">Announcements</h1>
                 <a href="{{ route('announcements.create') }}"
-                   class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
-                    Add Announcement
+                   class="bg-[#0057D8] text-white font-medium py-2 px-4 rounded-[6px] flex items-center gap-2">
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                 <span class='text-[14px] font-[400] font-[DM-sans] text-white'>Add New</span>
                 </a>
             </div>
 
@@ -32,23 +33,23 @@
                 </div>
             @endif
 
-            <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow-md rounded-lg">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-100 dark:bg-gray-700">
+            <div class="overflow-x-auto bg-white">
+                <table class="min-w-full">
+                    <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">#</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Title</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Publish Date</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Body</th>
+                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">#</th>
+                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">Title</th>
+                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">Publish Date</th>
+                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">Body</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <tbody>
                         @forelse ($announcements as $announcement)
                             <tr>
-                                <td class="px-6 py-4 text-gray-900 dark:text-white">{{ $announcement->id }}</td>
-                                <td class="px-6 py-4 text-gray-900 dark:text-white font-semibold">{{ $announcement->title }}</td>
-                                <td class="px-6 py-4 text-gray-900 dark:text-white">{{ $announcement->publish_date }}</td>
-                                <td class="px-6 py-4 text-gray-900 dark:text-white">{{ Str::limit($announcement->body, 100) }}</td>
+                                <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ $announcement->id }}</td>
+                                <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ $announcement->title }}</td>
+                                <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ $announcement->publish_date }}</td>
+                                <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ Str::limit($announcement->body, 100) }}</td>
                             </tr>
                         @empty
                             <tr>

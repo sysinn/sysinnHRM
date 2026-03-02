@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -41,6 +40,10 @@ class Employee extends Authenticatable
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function documents()
+    {
+        return $this->hasMany(EmployeeDocument::class);
     }
 
 

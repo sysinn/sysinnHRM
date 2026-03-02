@@ -12,7 +12,7 @@ class RoleModuleController extends Controller
         $modules = Module::orderBy('label')->get();
         $assigned = $role->modules->pluck('id')->toArray();
 
-        return view('roles.edit-modules', compact('role', 'modules', 'assigned'));
+        return view('roles.edit_modules', compact('role', 'modules', 'assigned'));
     }
 
     public function update(Request $request, Role $role)

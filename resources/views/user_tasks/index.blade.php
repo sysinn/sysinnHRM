@@ -33,25 +33,25 @@
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead class="bg-gray-100 dark:bg-gray-700">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">#</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Employee</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Date</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Subject</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Status</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Created At</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">#</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">Employee</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">Date</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">Subject</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">Status</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">Created At</th>
                     <!-- <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Actions</th> -->
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse ($users_tasks as $task)
                     <tr>
-                        <td class="px-6 py-4 text-gray-900 dark:text-white">{{ $task->id }}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-white">{{ $task->employee->first_name }} {{ $task->employee->last_name }}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-white">{{ $task->task_date }}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-white">
+                        <td class="px-6 py-4 text-gray-900 dark:text-white whitespace-nowrap">{{ $task->id }}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-white whitespace-nowrap">{{ $task->employee->first_name }} {{ $task->employee->last_name }}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-white whitespace-nowrap">{{ $task->task_date }}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-white whitespace-nowrap">
                             <a href="{{ route('employee-daily-tasks.show', $task->id) }}">{{ $task->task_subject }}</a></td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-white">{{ ucfirst($task->status) }}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-white">{{ $task->created_at->format('d M Y, h:i A') }}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-white whitespace-nowrap">{{ ucfirst($task->status) }}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-white whitespace-nowrap">{{ $task->created_at->format('d M Y, h:i A') }}</td>
                         <!-- <td class="px-6 py-4 space-x-2">
                             <a href="{{ route('employee-daily-tasks.edit', $task) }}"
                                class="text-yellow-600 hover:underline dark:text-yellow-400">

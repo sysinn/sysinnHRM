@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Department;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Position;
 class EmployeeController extends Controller
 {
     public function index(Request $request)
@@ -35,9 +36,11 @@ class EmployeeController extends Controller
 
     public function create()
     {
-          $departments = Department::all();
-          $roles = Role::all();
-    return view('employees.create', compact('departments', 'roles'));
+        $departments = Department::all();
+        $roles = Role::all();
+        $positions = Position::all();
+        return view('employees.create', compact('departments', 'roles' ,'positions'));
+         return view('certificates.create', compact('employees'));
        // return view('employees.create');
     }
 

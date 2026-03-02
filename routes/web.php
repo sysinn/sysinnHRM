@@ -6,7 +6,7 @@ use App\Http\Controllers\EmployeeDailyTaskController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\UserTasksController;
 use App\Http\Controllers\UsersController;
-use App\Http\Controllers\UserDashboardController;
+use App\http\Controllers\UserDashboardController;
 use App\Http\Controllers\EmployeeTaskCommentController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DepartmentController;
@@ -14,6 +14,10 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RoleModuleController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\EmployeeDocumentController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\MenuItemController;
+use App\Http\Controllers\ExperienceCertificateController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,12 +34,9 @@ Route::resource('departments', DepartmentController::class);
 //     Route::get('/user-tasks/{id}', [UserTasksController::class, 'show'])->name('user.tasks.show');
 // });
 
-
-
      Route::get('/login', function () {
         return redirect('/userslogin');
     })->name('login');
-
 
 // Route to show tasks for user (role_id === 9)
 Route::get('/UserTasks', [UserTasksController::class, 'index'])
@@ -46,18 +47,8 @@ Route::get('/user-tasks/{id}', [UserTasksController::class, 'show'])
      ->middleware('auth')
      ->name('user.tasks.show');
 
-
-
-
-
-
 Route::resource('employees', \App\Http\Controllers\EmployeeController::class);
-
-
-
-
 //Route::resource('employee-daily-tasks', EmployeeDailyTaskController::class);
-
 Route::group([
     'middleware' => function ($request, $next) {
         if (Auth::guard('employee')->check() || Auth::check()) {
@@ -137,22 +128,58 @@ Route::post('/tasks/{id}/share-documents', [EmployeeDailyTaskController::class, 
 
 
 
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
-//     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clock-in');
-//     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clock-out');
-// });
-//     Route::post('/attendance/break', [AttendanceController::class, 'break'])->name('attendance.break');
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clock-in');
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clock-out');
-    Route::post('/attendance/break', [AttendanceController::class, 'break'])->name('attendance.break'); // ✅ fix here
 });
     Route::post('/attendance/break', [AttendanceController::class, 'break'])->name('attendance.break');
+use App\Http\Controllers\PayrollController;
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::resource('payroll', PayrollController::class);
 });
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('announcements', AnnouncementController::class);
+});
+//Route::resource('employee-documents', EmployeeDocumentController::class);
+//Route::post('employees/{employee}/documents', [EmployeeDocumentController::class, 'store'])->name('employees.documents.store');
+Route::middleware(['auth'])->group(function () {
+    // Route for global document center (no employee ID required)
+    Route::get('/employee-documents', [EmployeeDocumentController::class, 'listAll'])->name('employee-documents.index');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('employees/{employee}/documents', [EmployeeDocumentController::class, 'index'])->name('employees.documents.index');
+    Route::post('employees/{employee}/documents', [EmployeeDocumentController::class, 'store'])->name('employees.documents.store');
+});
+
+Route::resource('positions', App\Http\Controllers\PositionController::class);
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
+
+Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('menu-items', MenuItemController::class)->only(['index', 'create', 'store']);
+});
+
+Route::get('/userslist', [UsersController::class, 'index'])->name('users.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/certificates', [ExperienceCertificateController::class, 'index'])->name('certificates.index');
+    Route::get('/certificates/create', [ExperienceCertificateController::class, 'create'])->name('certificates.create');
+    Route::post('/certificates', [ExperienceCertificateController::class, 'store'])->name('certificates.store');
+    Route::get('/certificates/download/{id}', [ExperienceCertificateController::class, 'download'])->name('certificates.download');
+});
+
+
+
+Route::get('/employees/search', [EmployeeController::class, 'search'])->name('employees.search');
+Route::get('/employee-daily-tasks/search', [EmployeeDailyTaskController::class, 'search'])->name('employee-daily-tasks.search');

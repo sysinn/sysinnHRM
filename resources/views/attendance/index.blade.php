@@ -7,22 +7,20 @@
     button.bg-yellow-500 { background-color: orange !important; }
 </style>
 
-<div class="flex min-h-screen">
+<div class="flex min-h-screen px-5">
     @include('layouts.sidebar')
 
-    <main class="flex-1 p-6">
+    <main class="flex-1 bg-white py-5 px-5">
         <div class="max-w-7xl mx-auto">
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-semibold text-gray-800 dark:text-white">
+                <h1 class="text-[20px] font-semibold text-[#1E1E1E] font-[DM-sans] mb-[2rem]">
                     Attendance & Time Tracking
                 </h1>
 
                 <!-- Work Timer -->
-              <div class="text-lg font-semibold text-blue-700 dark:text-blue-300">
-    Work Duration: <span id="work-timer">00:00:00</span>
-</div>
-
-
+                <div class="text-lg font-semibold text-blue-700 dark:text-blue-300">
+                    Work Duration: <span id="work-timer">00:00:00</span>
+                </div>
             </div>
 
             <!-- Action Buttons -->
@@ -68,23 +66,23 @@
             @endif
 
             <!-- Attendance Table -->
-            <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow-md rounded-lg">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-100 dark:bg-gray-700">
+            <div class="overflow-x-auto bg-white">
+                <table class="min-w-full">
+                    <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Date</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Clock In</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Clock Out</th>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Breaks</th>
+                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">Date</th>
+                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">Clock In</th>
+                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">Clock Out</th>
+                            <th class="text-left text-[14px] font-[500] font-[DM-sans] text-[#9291A5] uppercase leading-[21px]">Breaks</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <tbody class=",t-5">
                         @forelse ($attendances as $attendance)
                         <tr>
-                            <td class="px-6 py-4 text-gray-900 dark:text-white">{{ $attendance->date }}</td>
-                            <td class="px-6 py-4 text-gray-900 dark:text-white">{{ $attendance->clock_in }}</td>
-                            <td class="px-6 py-4 text-gray-900 dark:text-white">{{ $attendance->clock_out ?? '—' }}</td>
-                            <td class="px-6 py-4 text-gray-900 dark:text-white">
+                            <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ $attendance->date }}</td>
+                            <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ $attendance->clock_in }}</td>
+                            <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">{{ $attendance->clock_out ?? '—' }}</td>
+                            <td class="text-[15px] capitalize font-[400] font-[DM-sans] text-[#1E1E1E] leading-[21px]">
                                 @forelse ($attendance->breaks as $break)
                                     <div class="mb-1">
                                         <strong>Start:</strong> {{ \Carbon\Carbon::parse($break->break_start)->format('h:i A') }}<br>
@@ -114,7 +112,7 @@
 
 <!-- Work Timer Script -->
 <script>
-    const clockInTime = @json($clockInTime);
+    const clockInTimestamp = {{ $clockInTime ? \Carbon\Carbon::parse($clockInTime)->timestamp : 'null' }};
     const onBreak = @json(session('onBreak'));
     let timerInterval = null;
     let elapsed = 0;
@@ -144,10 +142,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        if (clockInTime) {
-            const clockIn = new Date(clockInTime);
-            const now = new Date();
-            const secondsElapsed = Math.floor((now - clockIn) / 1000);
+        if (clockInTimestamp) {
+            const now = Math.floor(Date.now() / 1000);
+            const secondsElapsed = now - clockInTimestamp;
+
             if (!onBreak) {
                 startTimerFrom(secondsElapsed);
             } else {

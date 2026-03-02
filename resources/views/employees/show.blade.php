@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex min-h-screen bg-gray-100">
+<div class="flex min-h-screen bg-white">
     <!-- Sidebar -->
     @include('layouts.sidebar')
 
     <!-- Main content -->
     <main class="flex-1 p-8">
-        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-md p-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Employee Details</h2>
+        <div class="max-w-4xl mx-auto bg-white rounded-2xl">
+            <h2 class="c">Employee Details</h2>
 
             <div class="flex flex-col items-center mb-6">
                 @if($employee->profile_picture)
@@ -21,11 +21,11 @@
                     </div>
                 @endif
 
-                <h3 class="text-xl font-semibold text-gray-700">{{ $employee->first_name }} {{ $employee->last_name }}</h3>
-                <p class="text-gray-500">{{ $employee->position ?? 'N/A' }}</p>
+                <h3 class="text-[20px] font-[600] capitalize text-[#1E1E1E] font-[DM-sans]">{{ $employee->first_name }} {{ $employee->last_name }}</h3>
+                <p class="text-[#5F6377] text-[16px] capitalize font-[500] font-[DM-sans]">{{ $employee->position ?? 'N/A' }}</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-[#5F6377] font-[DM-sans]">
                 <div>
                     <p><strong>Email:</strong> {{ $employee->email }}</p>
                     <p><strong>Phone:</strong> {{ $employee->phone ?? 'N/A' }}</p>

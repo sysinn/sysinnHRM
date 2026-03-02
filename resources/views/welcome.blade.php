@@ -16,8 +16,8 @@
 </head>
 <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen flex flex-col">
 
-<header class="w-full py-6 px-6 lg:px-12 flex justify-between items-center shadow-sm bg-white dark:bg-gray-800">
-    <h1 class="text-xl font-bold">Syssin <span class="text-blue-600">HRM</span></h1>
+<header class="w-full py-6 px-4 lg:px-4 flex justify-between items-center shadow-sm bg-white dark:bg-gray-800">
+    <h1 class="text-xl font-bold"><img src="{{ asset('img/Logo.webp') }}" alt="Logo Photo"></h1>
     <nav class="space-x-4">
         <!-- <a href="{{ route('employee.login') }}" class="px-4 py-2 rounded border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white text-sm">Employee login</a> -->
 
@@ -33,10 +33,10 @@
 
 
     <main class="flex-grow flex flex-col items-center justify-center text-center px-6 py-12">
-        <h2 class="text-4xl lg:text-5xl font-extrabold mb-4">Streamline Your HR Management</h2>
+        <h2 class="text-4xl lg:text-5xl font-extrabold mb-4 font-[DM-sans]">Streamline Your HR Management</h2>
         <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-xl">Efficient, secure, and user-friendly HRM software to manage your workforce. Built by <strong>Syssin</strong> for companies that care.</p>
         @guest
-            <a href="#" class="inline-block px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 text-base font-medium">Get Started</a>
+            <a href="#" class="inline-block px-6 py-3 text-white rounded hover:bg-blue-700 text-base font-medium bg-[#0057D8] rounded-[10px]">Get Started</a>
         @endguest
     </main>
 

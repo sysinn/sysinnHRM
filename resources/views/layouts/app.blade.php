@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>@yield('title', config('app.name', 'Laravel'))</title>
+
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -13,14 +14,40 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <style>
+            html{
+                overflow-x:hidden !important;
+            }
+            @media screen and (max-width:1024px) {
+                
+            
+            .sidebar{
+                transform:translateX(-280px);
+                position:absolute;
+                transition:all 0.2s ease-in-out;
+                box-shadow:0px 0px 3px grey;
+            }
+            .sidebar.active{
+                transform:translateX(0) !important;
+                position:relative !important;
+            }
+            .menuicon{
+                cursor: pointer;
+            }
+        }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+           @unless (request()->routeIs('userslogin') || request()->routeIs('usersregister'))
+                 @include('layouts.navigation')
+           @endunless
+
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
+                <header class="bg-dark dark:bg-gray-800 shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -32,5 +59,24 @@
                 @yield('content')  <!-- This will render content passed from child views -->
             </main>
         </div>
+
+
+
+        <script>
+            // alert("Hello");
+            let menuicon=document.querySelector(".menuicon");
+            let sidebar=document.querySelector(".sidebar");
+            let sidebar_link=document.querySelectorAll(".sidebar_link");
+
+            menuicon.addEventListener("click",(e)=>{
+                sidebar.classList.toggle("active");
+            });
+            console.log(sidebar_link);
+            sidebar_link.forEach((e)=>{
+                e.addEventListener("click",()=>{
+                    sidebar.classList.remove("active");
+                })
+            }); 
+        </script>
     </body>
 </html>

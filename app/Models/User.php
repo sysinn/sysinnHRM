@@ -66,5 +66,32 @@ class User extends Authenticatable
         }
 
 
+            /**
+     * Check if the user has a specific role by name.
+     */
+    public function hasRole($role)
+    {
+        if (is_string($role)) {
+            return $this->roles->contains('name', $role);
+        }
+
+        if (is_array($role)) {
+            return $this->roles->whereIn('name', $role)->isNotEmpty();
+        }
+
+        return false;
+    }
+
+    /**
+     * Assign a role to the user.
+     */
+    public function assignRole($roleName)
+    {
+        $role = Role::where('name', $roleName)->firstOrFail();
+        $this->roles()->attach($role);
+    }
+
+
+
 }
 
