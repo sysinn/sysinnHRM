@@ -5,6 +5,7 @@ use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Mail\PasswordResetMail;
 
 
 class User extends Authenticatable
@@ -90,6 +91,18 @@ class User extends Authenticatable
     public function isInactive()
     {
         return $this->status == 0;
+    }
+
+    /**
+     * Send a password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        // Use our custom password reset mail
+        \Mail::to($this->email)->send(new PasswordResetMail($this->email, $token));
     }
 
     /**

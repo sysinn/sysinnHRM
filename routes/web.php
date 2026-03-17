@@ -106,6 +106,15 @@ Route::post('/userslogin', [UsersController::class, 'login']);
 Route::get('/usersregister', [UsersController::class, 'showRegisterForm'])->name('usersregister');
 Route::post('/usersregister', [UsersController::class, 'register']);
 Route::post('/logout', [UsersController::class, 'logout'])->name('logout');
+
+// Password Reset Routes
+Route::middleware('throttle:5,1')->group(function() {
+    Route::get('/forgot-password', [\App\Http\Controllers\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('/forgot-password', [\App\Http\Controllers\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('/reset-password/{token}', [\App\Http\Controllers\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [\App\Http\Controllers\ResetPasswordController::class, 'reset'])->name('password.update');
+});
+
 Route::get('/auth/dashboard', function () {
     return view('auth.dashboard');
 })->middleware('auth')->name('auth.dashboard');
@@ -185,11 +194,10 @@ Route::resource('leaves', \App\Http\Controllers\LeaveController::class);
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('daily-work', DailyWorkDoneController::class);
-<<<<<<< HEAD
+
     Route::get('daily-work/data', [DailyWorkDoneController::class, 'data'])->name('daily-work.data');
     Route::get('/admin/daily-work-status', [DailyWorkDoneController::class, 'adminStatus'])->name('daily-work.adminStatus');
-=======
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
+
 });
 
 Route::get('/check-role', function () {
@@ -230,8 +238,7 @@ Route::post('/daily-work/{id}/status',
 
 // Employee Daily Tasks
 Route::post('/employee-daily-tasks/{task}/status', [EmployeeDailyTaskController::class, 'updateStatus'])
-<<<<<<< HEAD
+
     ->name('employee-daily-tasks.updateStatus');
-=======
-    ->name('employee-daily-tasks.updateStatus');
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
+
+

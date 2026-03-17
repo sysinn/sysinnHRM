@@ -6,7 +6,6 @@ use App\Models\DailyWorkDone;
 use App\Models\Department;
 use App\Models\Project;
 use App\Models\TaskType;
-<<<<<<< HEAD
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -62,29 +61,37 @@ class DailyWorkDoneController extends Controller
         return redirect()->route('dashboard')->with('error', 'Unauthorized Access. You do not have permission to view this page.');
     }
 
-    // Get selected date from request, default to today
-    $selectedDate = $request->input('date', now()->toDateString());
+    // Get selected date range from request, default to today
+    $startDate = $request->input('start_date', now()->toDateString());
+    $endDate = $request->input('end_date', now()->toDateString());
 
-    // Get all users with their employee data and selected date's work status
+    // Get all users with their employee data and work status for the date range
     $usersWithStatus = User::whereHas('employee')
         ->with('employee')
         ->orderBy('name')
         ->get()
-        ->map(function($user) use ($selectedDate) {
-            $workOnDate = $user->employee->dailyWorks()
-                ->where('date', $selectedDate)
-                ->first();
+        ->map(function($user) use ($startDate, $endDate) {
+            $worksInRange = $user->employee->dailyWorks()
+                ->whereBetween('date', [$startDate, $endDate])
+                ->orderBy('date', 'desc')
+                ->get();
+            
+            $totalQuantity = $worksInRange->sum('quantity');
+            $firstWork = $worksInRange->first();
+            
             return [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'has_work_today' => !is_null($workOnDate),
-                'last_entry' => $workOnDate ? $workOnDate->created_at : null,
-                'work_detail' => $workOnDate
+                'has_work_today' => $worksInRange->isNotEmpty(),
+                'last_entry' => $firstWork ? $firstWork->created_at : null,
+                'work_detail' => $firstWork,
+                'total_quantity' => $totalQuantity,
+                'works_count' => $worksInRange->count()
             ];
         });
 
-    return view('daily_work.admin-status', compact('usersWithStatus', 'selectedDate'));
+    return view('daily_work.admin-status', compact('usersWithStatus', 'startDate', 'endDate'));
    }
 
    public function index(Request $request)
@@ -206,33 +213,6 @@ class DailyWorkDoneController extends Controller
     } else {
         // Other roles - Unauthorized
         return redirect()->route('dashboard')->with('error', 'Unauthorized Access. You do not have permission to view this page.');
-=======
-use Illuminate\Http\Request;
-
-class DailyWorkDoneController extends Controller
-{
-   public function index()
-{
-    $user = auth()->user();
-
-    if ($user->roles->contains('id', 9)) {
-        // Employee
-        $employeeId = $user->employee?->id;
-
-        if (!$employeeId) {
-            return back()->withErrors(['error' => 'No employee profile linked.']);
-        }
-
-        $allWorks = DailyWorkDone::with(['department', 'project', 'employee.user'])
-            ->where('employee_id', $employeeId)
-            ->latest()
-            ->get();
-    } else {
-        // Admin / Super Admin
-        $allWorks = DailyWorkDone::with(['department', 'project', 'employee.user'])
-            ->latest()
-            ->get();
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
     }
 
     // TRELLO BOARD DATA (SAFE)
@@ -259,7 +239,6 @@ class DailyWorkDoneController extends Controller
         ];
     })->toArray();
 
-<<<<<<< HEAD
     return view('daily_work.index', compact('allWorks', 'boardWorks', 'calendarEvents', 'selectedUserId', 'selectedUser', 'selectedDate'));
    }
 
@@ -276,26 +255,10 @@ class DailyWorkDoneController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-=======
-    return view('daily_work.index', compact('allWorks', 'boardWorks', 'calendarEvents'));
-}
-
-
-    public function create()
-    {
-        return view('daily_work.create', [
-            'departments' => Department::all(),
-            'projects'    => Project::all(),
-            'taskTypes'   => TaskType::all(),
-        ]);
-    }
-
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
     public function store(Request $request)
     {
         $validated = $request->validate([
             'date' => 'required|date',
-<<<<<<< HEAD
             'task_type' => 'required|string|max:255',
             'detail' => 'required|string',
             'project_id' => 'nullable|exists:projects,id',
@@ -305,43 +268,22 @@ class DailyWorkDoneController extends Controller
         $employee = $user->employee;
 
         if (!$employee) {
-=======
-            'department_id' => 'required|exists:departments,id',
-            'project_id' => 'required|exists:projects,id',
-            'task_type' => 'required|string',
-            'quantity' => 'required|integer|min:1|max:5',
-            'status' => 'required|in:pending,in-progress,completed',
-            'detail' => 'nullable|string',
-            'url' => 'nullable|string',
-        ]);
-
-        $employeeId = auth()->user()?->employee?->id;
-
-        if (!$employeeId) {
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
             return back()->withErrors(['error' => 'No employee profile linked.']);
         }
 
         DailyWorkDone::create(array_merge($validated, [
-<<<<<<< HEAD
             'employee_id' => $employee->id,
             'department_id' => $employee->department_id,
             'status' => 'pending'
-=======
-            'employee_id' => $employeeId
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
         ]));
 
         return redirect()->route('daily-work.index')
             ->with('success', 'Daily work added.');
     }
 
-<<<<<<< HEAD
     /**
      * Update the status of a work item.
      */
-=======
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
@@ -355,7 +297,6 @@ class DailyWorkDoneController extends Controller
         return response()->json(['success' => true]);
     }
 
-<<<<<<< HEAD
     /**
      * Display the specified resource.
      */
@@ -414,21 +355,3 @@ class DailyWorkDoneController extends Controller
             ->with('success', 'Daily work deleted.');
     }
 }
-=======
-
-
-
-  public function show($id)
- {
-     $work = DailyWorkDone::findOrFail($id);
-     $projects = Project::all();
-    $departments = Department::all();
-    $taskTypes = TaskType::all();
-    $work = DailyWorkDone::with(['employee.user', 'department', 'project'])->findOrFail($id);
-    return view('daily_work.show', compact('work', 'departments', 'projects', 'taskTypes'));
- }
-
-
-
-}
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780

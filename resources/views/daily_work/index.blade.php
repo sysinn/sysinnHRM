@@ -5,29 +5,13 @@
 @section('content')
 
     @php
-<<<<<<< HEAD
-        $isEmployee = auth()->check() && auth()->user()->employee && auth()->user()->employee->department_id !== 9;
-         
-=======
 
-        $isEmployee = auth()->check() && auth()->user()->employee;
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
+       $isEmployee = auth()->check() && auth()->user()->employee && auth()->user()->employee->department_id !== 9;
 
         $currentEmployeeId = $isEmployee ? auth()->user()->employee->id : null;
 
     @endphp
 
-<<<<<<< HEAD
-    <pre>
-    isEmployee: {{ $isEmployee ? 'true' : 'false' }}
-    auth check: {{ auth()->check() ? 'true' : 'false' }}
-    has employee: {{ auth()->check() && auth()->user()->employee ? 'true' : 'false' }}
-    department_id: {{ auth()->check() && auth()->user()->employee ? auth()->user()->employee->department_id : 'N/A' }}
-</pre>
-
-
-=======
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
     <style>
         .fc-daygrid-day-events {
 
@@ -84,33 +68,12 @@
   @include('layouts.sidebar')
 
 <div class="w-full">
-<<<<<<< HEAD
       {{-- Toggle removed - List View only --}}
-=======
-      <div class="flex gap-2 mb-2 bg-gray-200 rounded-lg p-1 w-max m-auto mt-3 shadow-sm">
-
-      <button id="boardViewBtn"
-         class="px-4 py-2 rounded-md bg-white text-gray-800 shadow-sm transition-all duration-200 font-medium">
-
-         Board View
-
-        </button>
-
-        <button id="listViewBtn"
-            class="px-4 py-2 rounded-md text-gray-600 hover:text-gray-800 transition-all duration-200 font-medium">
-
-              List View
-
-        </button>
-
-        </div>
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 
         <main class="flex-1 bg-white p-8 font-[PlusJakartaSans]">
 
         <div class="flex items-center gap-3 justify-center">
 
-<<<<<<< HEAD
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
                 {{-- Simple Date Input for filtering --}}
                 <input type="date" id="dateFilter" 
@@ -119,15 +82,6 @@
             </div>
 
             <button id="clearDateFilter"
-=======
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4" style="max-width: 600px;">
-
-            <div id="calendar" style="max-height: 500px; overflow-y: auto;"></div>
-
-        </div>
-
-        <button id="clearDateFilter"
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
             class="px-4 py-2.5 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-50 border border-gray-200 rounded-md transition-colors duration-200"
             title="Clear date filter">
 
@@ -150,12 +104,8 @@
 
         
 
-<<<<<<< HEAD
             {{-- Board View - Hidden by default --}}
             <div id="boardView" class="max-w-7xl mx-auto hidden">
-=======
-            <div id="boardView" class="max-w-7xl mx-auto">
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 
 
 
@@ -351,12 +301,8 @@
 
             </div>
 
-<<<<<<< HEAD
             {{-- List View - Shown by default --}}
             <div id="listView" class="max-w-7xl mx-auto">
-=======
-            <div id="listView" class="max-w-7xl mx-auto hidden">
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 
 
 
@@ -388,11 +334,7 @@
                             <tr>
 
                                 <th>Date</th>
-<<<<<<< HEAD
-                                
-=======
 
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
                                 @if(!$isEmployee)
 
                                     <th>Emp</th>
@@ -453,11 +395,7 @@
 
                                 <tr data-date="{{ \Carbon\Carbon::parse($work->date)->format('Y-m-d') }}">
 
-<<<<<<< HEAD
                                     <td data-order="{{ $work->date }}">{{ \Carbon\Carbon::parse($work->date)->format('d M Y') }}</td>
-=======
-                                    <td>{{ \Carbon\Carbon::parse($work->date)->format('d M Y') }}</td>
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 
 
 
@@ -554,7 +492,6 @@
 
 
 
-<<<<<<< HEAD
     {{-- FullCalendar CSS removed --}}
 
 
@@ -568,17 +505,6 @@
 
 
 
-=======
-    <!-- FullCalendar CSS -->
-
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
-
-
-
-    <!-- FullCalendar JS -->
-
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 
 
 
@@ -587,64 +513,7 @@
 
 
     <script>
-<<<<<<< HEAD
         // Drag & Drop functionality for board view (hidden)
-=======
-
-        const boardView = document.getElementById('boardView');
-
-        const listView = document.getElementById('listView');
-
-        const boardViewBtn = document.getElementById('boardViewBtn');
-
-        const listViewBtn = document.getElementById('listViewBtn');
-
-
-
-        // Button styles
-
-        const activeBtnStyles = 'px-4 py-2 rounded-md bg-white text-gray-800 shadow-sm transition-all duration-200 font-medium';
-
-        const inactiveBtnStyles = 'px-4 py-2 rounded-md text-gray-600 hover:text-gray-800 transition-all duration-200 font-medium';
-
-
-
-        boardViewBtn.onclick = () => {
-
-            boardView.classList.remove('hidden');
-
-            listView.classList.add('hidden');
-
-
-
-            // Update button styles
-
-            boardViewBtn.className = activeBtnStyles;
-
-            listViewBtn.className = inactiveBtnStyles;
-
-        };
-
-
-
-        listViewBtn.onclick = () => {
-
-            listView.classList.remove('hidden');
-
-            boardView.classList.add('hidden');
-
-
-
-            // Update button styles
-
-            listViewBtn.className = activeBtnStyles;
-
-            boardViewBtn.className = inactiveBtnStyles;
-
-        };
-
-    </script>
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 
 
 
@@ -957,7 +826,6 @@
 
 
     <script>
-<<<<<<< HEAD
         console.log('=== Daily Work Page Debug ===');
         console.log('Board View element:', document.getElementById('boardView'));
         console.log('Calendar element:', document.getElementById('dateFilter'));
@@ -967,15 +835,6 @@
         // DIAGNOSTIC: Check if jQuery and DataTables are already loaded
         console.log('=== DataTables Debug Info ===');
         console.log('jQuery loaded:', typeof jQuery !== 'undefined');
-=======
-
-        // DIAGNOSTIC: Check if jQuery and DataTables are already loaded
-
-        console.log('=== DataTables Debug Info ===');
-
-        console.log('jQuery loaded:', typeof jQuery !== 'undefined');
-
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
         console.log('DataTables loaded:', typeof jQuery !== 'undefined' && typeof jQuery.fn.DataTable !== 'undefined');
 
 
@@ -1019,10 +878,7 @@
             let table = $('#dailyWorkTablelist').DataTable({
 
                 ordering: true,
-<<<<<<< HEAD
                 order: [[0, 'desc']],
-=======
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 
                 pageLength: 10,
 
@@ -1270,59 +1126,11 @@
 
 
 
-<<<<<<< HEAD
 
 
 
     <script>
         // Date filter functionality
-=======
-    <script>
-
-        const boardBtn = document.getElementById('boardViewBtn');
-
-        const listBtn = document.getElementById('listViewBtn');
-
-
-
-        function activateBoard() {
-
-            boardBtn.classList.add('bg-blue-600', 'text-white');
-
-            boardBtn.classList.remove('bg-gray-200', 'text-gray-700');
-
-
-
-            listBtn.classList.add('bg-gray-200', 'text-gray-700');
-
-            listBtn.classList.remove('bg-blue-600', 'text-white');
-
-        }
-
-
-
-        function activateList() {
-
-            listBtn.classList.add('bg-blue-600', 'text-white');
-
-            listBtn.classList.remove('bg-gray-200', 'text-gray-700');
-
-
-
-            boardBtn.classList.add('bg-gray-200', 'text-gray-700');
-
-            boardBtn.classList.remove('bg-blue-600', 'text-white');
-
-        }
-
-
-
-        boardBtn.addEventListener('click', activateBoard);
-
-        listBtn.addEventListener('click', activateList);
-
-    </script>
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 
 
 
@@ -1431,7 +1239,6 @@
 
 
     <script>
-<<<<<<< HEAD
         document.addEventListener('DOMContentLoaded', function () {
             const dateInput = document.getElementById('dateFilter');
             const clearBtn = document.getElementById('clearDateFilter');
@@ -1497,204 +1304,23 @@
                 filterByDate(null);
             });
         });
-=======
-
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const calendarEl = document.getElementById('calendar');
-
-
-
-            const calendar = new FullCalendar.Calendar(calendarEl, {
-
-                initialView: 'dayGridMonth',
-
-                headerToolbar: {
-
-                    left: 'prev,next today',
-
-                    center: 'title',
-
-                    right: ''
-
-                },
-
-                // No events - just a date picker
-
-                events: [],
-
-                dateClick: function (info) {
-
-                    // When clicking a date, filter entries for that date
-
-                    filterByDate(info.dateStr);
-
-                    // Highlight the selected date
-
-                    document.querySelectorAll('.fc-daygrid-day').forEach(day => {
-
-                        day.classList.remove('bg-blue-200');
-
-                    });
-
-                    info.dayEl.classList.add('bg-blue-200');
-
-                },
-
-                height: 'auto',
-
-                buttonText: {
-
-                    today: 'Today'
-
-                }
-
-            });
-
-
-
-            calendar.render();
-
-
-
-            // Filter function
-
-            function filterByDate(dateStr) {
-
-                // Filter board view cards
-
-                document.querySelectorAll('.draggable-card').forEach(card => {
-
-                    const cardDate = card.dataset.date;
-
-                    card.style.display = (!dateStr || cardDate === dateStr) ? 'block' : 'none';
-
-                });
-
-
-
-                // Filter list view rows
-
-                if (typeof jQuery !== 'undefined' && typeof $.fn.DataTable !== 'undefined') {
-
-                    const table = $('#dailyWorkTablelist').DataTable();
-
-                    $.fn.dataTable.ext.search = [];
-
-
-
-                    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-
-                        const rowDate = table.row(dataIndex).node().dataset.date;
-
-                        return !dateStr || rowDate === dateStr;
-
-                    });
-
-
-
-                    table.draw();
-
-                }
-
-
-
-                // Update selected date display
-
-                document.getElementById('selectedDateDisplay')?.remove();
-
-                const display = document.createElement('div');
-
-                display.id = 'selectedDateDisplay';
-
-                display.className = 'text-sm text-gray-600 mt-2 text-center';
-
-                display.innerHTML = `Showing entries for: <strong>${new Date(dateStr).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</strong>`;
-
-                document.getElementById('calendar').parentNode.appendChild(display);
-
-            }
-
-
-
-            // Clear filter button
-
-            document.getElementById('clearDateFilter').addEventListener('click', function () {
-
-                // Show all cards
-
-                document.querySelectorAll('.draggable-card').forEach(card => {
-
-                    card.style.display = 'block';
-
-                });
-
-
-
-                // Show all table rows
-
-                if (typeof jQuery !== 'undefined' && typeof $.fn.DataTable !== 'undefined') {
-
-                    const table = $('#dailyWorkTablelist').DataTable();
-
-                    $.fn.dataTable.ext.search = [];
-
-                    table.draw();
-
-                }
-
-
-
-                // Remove selected date display
-
-                document.getElementById('selectedDateDisplay')?.remove();
-
-
-
-                // Go to today's date in calendar
-
-                calendar.today();
-
-
-
-                // Remove day highlights
-
-                document.querySelectorAll('.fc-daygrid-day').forEach(day => {
-
-                    day.classList.remove('bg-blue-200');
-
-                });
-
-            });
-
-        });
-
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
     </script>
 
 
 
-<<<<<<< HEAD
 
     @endsection
 <style>
 </style>
 
 
-=======
-@endsection
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 
 
 
 
 
 <style>
-<<<<<<< HEAD
 
-=======
-    /* Compact header */
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780
 
     .fc-toolbar-title {
 
@@ -1713,13 +1339,9 @@
 
 
         }
-<<<<<<< HEAD
 }
 
 button#clearDateFilter {
     display: none !important;
 }
 </style>
-=======
-</style>
->>>>>>> 2ac17b5ed6aec8348ccae53244e4f31ced200780

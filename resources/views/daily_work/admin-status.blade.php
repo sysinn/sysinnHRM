@@ -17,19 +17,30 @@
                     <div class="flex justify-between items-center mb-6">
                         <h1 class="text-2xl font-semibold text-gray-800">Daily Work Status</h1>
                         <form action="{{ route('daily-work.adminStatus') }}" method="GET" class="flex items-center gap-2">
-                            <input type="date" 
-                                   name="date" 
-                                   value="{{ $selectedDate }}" 
-                                   class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                   onchange="this.form.submit()">
+                            <div class="flex items-center gap-2">
+                                <label class="text-sm text-gray-600">From:</label>
+                                <input type="date" 
+                                       name="start_date" 
+                                       value="{{ $startDate }}" 
+                                       class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       onchange="this.form.submit()">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <label class="text-sm text-gray-600">To:</label>
+                                <input type="date" 
+                                       name="end_date" 
+                                       value="{{ $endDate }}" 
+                                       class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       onchange="this.form.submit()">
+                            </div>
                         </form>
                     </div>
 
                     <!-- Summary Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                         <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
-                            <div class="text-blue-600 font-semibold">Date</div>
-                            <div class="text-xl font-bold text-blue-800">{{ \Carbon\Carbon::parse($selectedDate)->format('d M Y') }}</div>
+                            <div class="text-blue-600 font-semibold">Date Range</div>
+                            <div class="text-xl font-bold text-blue-800">{{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} - {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</div>
                         </div>
                         <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
                             <div class="text-blue-600 font-semibold">Total Employees</div>
@@ -87,7 +98,7 @@
                                     @if($user['has_work_today'] && $user['work_detail'])
                                         <div class="text-xs text-gray-600 bg-gray-50 rounded-lg p-2">
                                             <div class="font-medium">{{ $user['work_detail']['task_type'] ?? 'N/A' }}</div>
-                                            <div class="text-gray-500">Number of Tasks: {{ $user['work_detail']['quantity'] ?? 0 }}</div>
+                                            <div class="text-gray-500">Number of Tasks: {{ $user['total_quantity'] ?? 0 }}</div>
                                         </div>
                                     @endif
                                 </div>

@@ -14,6 +14,12 @@
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Sign In</h2>
                 <p class="text-gray-500 dark:text-gray-400 mb-6">Fill in your credentials to access your account.</p>
 
+                @if (session('status'))
+                    <div class="mb-4 text-green-600 bg-green-100 border border-green-300 rounded p-4 dark:bg-green-200 dark:text-green-800">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 @if ($errors->any())
                     <div class="mb-4 text-red-600 bg-red-100 border border-red-300 rounded p-4 dark:bg-red-200 dark:text-red-800">
                         <ul class="list-disc list-inside">
@@ -44,6 +50,12 @@
                                 class="w-full bg-[#0057D8] hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition">
                             Login
                         </button>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="{{ route('password.request') }}" class="text-sm text-blue-600 hover:underline dark:text-blue-400 font-semibold">
+                            Forgot Password?
+                        </a>
                     </div>
                 </form>
 
